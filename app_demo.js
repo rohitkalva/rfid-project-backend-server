@@ -27,7 +27,7 @@ const db = new Promise(function(resolve, reject){
 	    function (err, stream) {
 	      if (err) throw err; // SSH error: can also send error in promise ex. reject(err)
 	      // use `sql` connection as usual
-	      	const connection = mysql.createConnection({
+	      	 connection = mysql.createConnection({
 	          host     : '127.0.0.1',
 	          user     : 'root',
               password : 'Komrc@94', 
