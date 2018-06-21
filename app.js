@@ -85,7 +85,7 @@ app.post('/registration', function(req, res) {
       values.push([jsondata[i].tagID,jsondata[i].product, jsondata[i].purchasedate, jsondata[i].invoicenumber, jsondata[i].nextinspdate])
     
     //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-    connection.query('INSERT INTO registration (tagID, product, purchasedate, invoicenumber, nextinspdate) VALUES ?', [values], function(err,result) {
+    connection.query('INSERT INTO registration SET ?', jsondata, function(err,result) {
         if (err) throw err;
         res.end(JSON.stringify(result))
     })
