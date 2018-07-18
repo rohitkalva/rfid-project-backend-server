@@ -87,9 +87,7 @@ app.post('/registration', function(req, res) {
     //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
     connection.query('INSERT INTO registration SET ?', jsondata, function(err,result) {
         if (err) throw err;
-        //res.end(JSON.stringify(result))
-	return res.send({ error: false, data: result, message: 'Entry Successful!' });
-    })
+        return res.send({ error: false, data: result, message: 'Entry Successful!' });    })
     })
 
 app.post('/users', function(req, res) {
@@ -104,6 +102,8 @@ app.post('/users', function(req, res) {
     connection.query('INSERT INTO users (id, first_name, last_name) VALUES ?', [values], function(err,result) {
         if (err) throw err;
         res.end(JSON.stringify(result))
+    })
+    })
 
 app.listen(1080, () => {
     console.log("Server is up and listerning on port 1080")
