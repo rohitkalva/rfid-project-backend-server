@@ -42,50 +42,16 @@ app.get("/", (req, res) => {
     res.send("Hello from ROOOOT")
 })
 
-    app.get('/users1', (req, res) => {
-        //console.log("Fetching user with id: " + req.params.id)
-
-    const queryString = "SELECT * FROM db"
-
-    connection.query(queryString, (err, rows, fields) => {
-
-        if(err){
-            console.log("Failed to query " + err)
-            res.sendStatus(500)
-            return
-        }
-        console.log("Fetch Succesful")
-        res.json(rows)
-    })
-    })
-
-//Retrieve route
-app.get('/users', (req, res) => {
-    //console.log("Fetching user with id: " + req.params.id)
-
-const queryString = "SELECT * FROM users"
-
-connection.query(queryString, (err, rows, fields) => {
-
-    if(err){
-        console.log("Failed to query " + err)
-        res.sendStatus(500)
-        return
-    }
-    console.log("Fetch Succesful")
-    res.json(rows)
-})
-})
-app.post('/registration', function(req, res) {
+//Update route
+app.post('/reg', function(req, res) {
 
     var jsondata = req.body;
     var values = [];
-    
     for(var i=0; i< jsondata.length; i++)
-      values.push([jsondata[i].tagID,jsondata[i].product, jsondata[i].purchasedate, jsondata[i].invoicenumber, jsondata[i].nextinspdate])
+      values.push([jsondata[i].tagid,jsondata[i].equipment, jsondata[i].orderdate, jsondata[i].equipment_type, jsondata[i].labelling])
     
     //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-    connection.query('INSERT INTO registration SET ?', jsondata, function(err,result) {
+    connection.query('INSERT INTO reg SET ?', jsondata, function(err,result) {
         if (err) throw err;
         return res.send({ error: false, data: result, message: 'Entry Successful!' });    })
     })
