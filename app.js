@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-app.use(morgan('combined'))
+app.use(morgan('short'))
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -19,8 +19,7 @@ app.use(function(req, res, next) {
   
 
 //DB Connection Configuration
-const  connection = mysql.createConnection({
- 
+const  connection = mysql.createConnection({ 
     host     : 'localhost',
     user     : 'rfid',
     password : 'rfidproject',
@@ -56,27 +55,17 @@ app.post('/reg', function(req, res) {
     const orderdate = req.body.orderdate;
     const equipment_type = req.body.equipment_type;
     const labelling = req.body.labelling;
-    //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-    var queryString ='INSERT INTO reg (tagid, equipment, orderdata, equipment_type, labelling) VALUES (?, ?, ?, ?, ?)'
+    var queryString ='INSERT INTO reg (tagid, equipment, orderdate, equipment_type, labelling) VALUES (?, ?, ?, ?, ?)'
 
-    connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling], function(err,result) {
+    connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
         if (err) throw err;
         return res.send({ error: false, data: result, message: 'Entry Successful!' });    })
-    })
 
-app.post('/users', function(req, res) {
-
-    var jsondata = req.body;
-    var values = [];
-    
-    for(var i=0; i< jsondata.length; i++)
-      values.push([jsondata[i].id,jsondata[i].first_name, jsondata[i].last_name])
-    
-    //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-    connection.query('INSERT INTO users (id, first_name, last_name) VALUES ?', [values], function(err,result) {
-        if (err) throw err;
-        res.end(JSON.stringify(result))
-    })
+     //    var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
+    // connection.query(query1, [tagid, orderdate], function(err,result){
+    //     if(err) throw err;
+    //     return res.send({error: false, data: result, message: 'Entry Successful!'});
+    // }) 
     })
 
     app.get('/users', (req, res) => {
