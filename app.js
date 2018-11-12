@@ -20,6 +20,7 @@ app.use(function(req, res, next) {
 
 //DB Connection Configuration
 const  connection = mysql.createConnection({
+ 
     host     : 'localhost',
     user     : 'rfid',
     password : 'rfidproject',
@@ -45,13 +46,20 @@ app.get("/", (req, res) => {
 //Update route
 app.post('/reg', function(req, res) {
 
-    var jsondata = req.body;
-    var values = [];
-    for(var i=0; i< jsondata.length; i++)
-      values.push([jsondata[i].tagid,jsondata[i].equipment, jsondata[i].orderdate, jsondata[i].equipment_type, jsondata[i].labelling])
-    
+    console.log(req.body); 
+    // var jsondata = req.body;
+    // var values = [];
+    // for(var i=0; i< jsondata.length; i++)
+    //   values.push([jsondata[i].tagid,jsondata[i].equipment, jsondata[i].orderdate, jsondata[i].equipment_type, jsondata[i].labelling])
+    const tagid = req.body.tagid;
+    const equipment = req.body.equipment;
+    const orderdate = req.body.orderdate;
+    const equipment_type = req.body.equipment_type;
+    const labelling = req.body.labelling;
     //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-    connection.query('INSERT INTO reg SET ?', jsondata, function(err,result) {
+    var queryString ='INSERT INTO reg (tagid, equipment, orderdata, equipment_type, labelling) VALUES (?, ?, ?, ?, ?)'
+
+    connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling], function(err,result) {
         if (err) throw err;
         return res.send({ error: false, data: result, message: 'Entry Successful!' });    })
     })
@@ -68,6 +76,23 @@ app.post('/users', function(req, res) {
     connection.query('INSERT INTO users (id, first_name, last_name) VALUES ?', [values], function(err,result) {
         if (err) throw err;
         res.end(JSON.stringify(result))
+    })
+    })
+
+    app.get('/users', (req, res) => {
+        //console.log("Fetching user with id: " + req.params.id)
+
+    const queryString = "SELECT * FROM reg"
+
+    connection.query(queryString, (err, rows, fields) => {
+
+        if(err){
+            console.log("Failed to query " + err)
+            res.sendStatus(500)
+            return
+        }
+        console.log("Fetch Succesful")
+        res.json(rows)
     })
     })
 

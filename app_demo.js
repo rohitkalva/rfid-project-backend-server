@@ -17,11 +17,11 @@
         ssh.on('ready', function() {
         ssh.forwardOut(
             // source address, this can usually be any valid address
-            '165.227.155.203',
+            '46.101.232.21',
             // source port, this can be any valid port number
             3333,
             // destination address (localhost here refers to the SSH server)
-            '165.227.155.203',
+            '46.101.232.21',
             // destination port
             22,
             function (err, stream) {
@@ -45,9 +45,9 @@
             });
         });
         }).connect({
-        host: '165.227.155.203', //IP address where DB is hosted
+        host: '46.101.232.21', //IP address where DB is hosted
         port: 22,               //Port refering to the IP 
-        username: 'root',       //username to loginto the host  
+        username: 'rfid',       //username to loginto the host  
         password: 'rfidproject'  //password to log into host
         });
     });
@@ -71,6 +71,6 @@
     })
 
 
-    app.listen(3000, () => {
+    app.listen(1080, () => {
         console.log("Server is up and listerning on port 3000")
     })
