@@ -8,6 +8,9 @@
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.3.8"
+  },
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
@@ -17,7 +20,6 @@
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
     "mysql2": "^1.6.4",
-    "nodemon": "^1.18.6",
     "ssh2": "^0.6.1"
   }
 }
