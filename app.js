@@ -57,15 +57,47 @@ app.post('/reg', function(req, res) {
     const labelling = req.body.labelling;
     var queryString ='INSERT INTO reg (tagid, equipment, orderdate, equipment_type, labelling) VALUES (?, ?, ?, ?, ?)'
 
-    connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
-        if (err) throw err;
-        return res.send({ error: false, data: result, message: 'Entry Successful!' });    })
+    // connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
+    //     if (err) throw err;
+    //     return res.send({ error: false, data: result, message: 'Entry Successful!' });    })
 
-     //    var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
+        //var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
     // connection.query(query1, [tagid, orderdate], function(err,result){
     //     if(err) throw err;
     //     return res.send({error: false, data: result, message: 'Entry Successful!'});
     // }) 
+
+    connection.beginTransaction(function(err) {
+        if (err) { throw err; }
+        connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
+          if (err) { 
+            connection.rollback(function() {
+              throw err;
+            });
+          }
+       
+          var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
+       
+          connection.query(query1, [tagid, orderdate], function(err,result) {
+            if (err) { 
+              connection.rollback(function() {
+                throw err;
+              });
+            }  
+            connection.commit(function(err) {
+              if (err) { 
+                connection.rollback(function() {
+                  throw err;
+                });
+              }
+              console.log('Transaction Complete.');
+              return res.send({ error: false, data: result, message: 'Entry Successful!' });
+              connection.end();
+            });
+          });
+        });
+      });
+
     })
 
     app.get('/users', (req, res) => {
