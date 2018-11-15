@@ -42,7 +42,7 @@ app.get("/", (req, res) => {
     res.send("Hello from ROOOOT")
 })
 
-//Update route
+//API to add registration details to DB
 app.post('/reg', function(req, res) {
 
     console.log(req.body); 
@@ -98,6 +98,29 @@ app.post('/reg', function(req, res) {
         });
       });
 
+    })
+
+  //API to fetch TagIDs for mobile app
+  app.post('/datasend', function(req, res){
+    const tagid = req.body
+    console.log(tagid)
+
+    //["11a4b3c243", "11a4b3c245", "11a4b3c247"] JSON Input for the API
+
+    const queryString = "select * from reg where tagid IN (?)"
+
+    connection.query(queryString, [tagid], (err, result, fields) => {
+      
+      if(err){
+      console.log("Failed to query " + err)
+      res.sendStatus(500)
+       return
+      }
+      console.log("Fetch Succesful")
+      //res.json(rows)
+
+      return res.send({ error: false, data: result, message: 'Entry Successful!' });
+      })
     })
 
     app.get('/users', (req, res) => {
