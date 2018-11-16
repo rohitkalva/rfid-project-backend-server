@@ -101,13 +101,13 @@ app.post('/reg', function(req, res) {
     })
 
   //API to fetch TagIDs for mobile app
-  app.post('/datasend', function(req, res){
+  app.post('/app1', function(req, res){
     const tagid = req.body
     console.log(tagid)
 
     //["11a4b3c243", "11a4b3c245", "11a4b3c247"] JSON Input for the API
 
-    const queryString = "select * from reg where tagid IN (?)"
+    const queryString = "select r.tagid, r.equipment, d.nextinspdate, r.equipment_type, r.labelling from reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?)"
 
     connection.query(queryString, [tagid], (err, result, fields) => {
       
