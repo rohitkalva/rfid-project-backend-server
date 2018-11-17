@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
-const mysql = require('mysql')
+var connection = require('./config');
+
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
@@ -16,25 +17,9 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   });
-  
 
-//DB Connection Configuration
-const  connection = mysql.createConnection({ 
-    host     : 'localhost',
-    user     : 'rfid',
-    password : 'rfidproject',
-    database: 'rfid'
-})
+  app.post('/api/register',registerController.register);
 
-//Connect to DB
-connection.connect(function(err) {
-    if (err) {
-      console.error('error connecting: ' + err.stack)
-      return;
-    }
-  
-    console.log('connected as id ' + connection.threadId)
-  })
 
 //Default Route
 app.get("/", (req, res) => {
