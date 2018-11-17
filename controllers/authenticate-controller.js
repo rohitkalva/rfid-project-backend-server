@@ -8,8 +8,8 @@ module.exports.authenticate=function(req,res){
   
 //Input format 
 //{
-//	"username": "rohit",
-//	"password": "roht"
+//	"username": "username",
+//	"password": "password"
 //}
    
     connection.query('SELECT * FROM users WHERE username  = ?',[username], function (error, results, fields) {
@@ -30,7 +30,7 @@ module.exports.authenticate=function(req,res){
             }else{
                 res.json({
                   status:false,
-                  message:"Email and password does not match"
+                  message:"Username and password does not match"
                  });
             }
           
