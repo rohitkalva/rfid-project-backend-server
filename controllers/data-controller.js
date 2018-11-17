@@ -2,62 +2,7 @@ const express = require('express')
 const app = express();
 var connection = require('./../config');
 
-module.exports.registration=function(req,res){
-
-    console.log(req.body); 
-    // var jsondata = req.body;
-    // var values = [];
-    // for(var i=0; i< jsondata.length; i++)
-    //   values.push([jsondata[i].tagid,jsondata[i].equipment, jsondata[i].orderdate, jsondata[i].equipment_type, jsondata[i].labelling])
-    const tagid = req.body.tagid;
-    const equipment = req.body.equipment;
-    const orderdate = req.body.orderdate;
-    const equipment_type = req.body.equipment_type;
-    const labelling = req.body.labelling;
-    var queryString ='INSERT INTO reg (tagid, equipment, orderdate, equipment_type, labelling) VALUES (?, ?, ?, ?, ?)'
-
-    // connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
-    //     if (err) throw err;
-    //     return res.send({ error: false, data: result, message: 'Entry Successful!' });    })
-
-        //var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
-    // connection.query(query1, [tagid, orderdate], function(err,result){
-    //     if(err) throw err;
-    //     return res.send({error: false, data: result, message: 'Entry Successful!'});
-    // }) 
-
-    connection.beginTransaction(function(err) {
-        if (err) { throw err; }
-        connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
-          if (err) { 
-            connection.rollback(function() {
-              throw err;
-            });
-          }
-       
-          var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
-       
-          connection.query(query1, [tagid, orderdate], function(err,result) {
-            if (err) { 
-              connection.rollback(function() {
-                throw err;
-              });
-            }  
-            connection.commit(function(err) {
-              if (err) { 
-                connection.rollback(function() {
-                  throw err;
-                });
-              }
-              console.log('Transaction Complete.');
-              return res.send({ error: false, data: result, message: 'Entry Successful!' });
-              connection.end();
-            });
-          });
-        });
-      });
-}
-
+module.exports.registration=
 module.exports.app1=function(req, res){
     const tagid = req.body
     console.log(tagid)
