@@ -1,9 +1,20 @@
 var Cryptr = require('cryptr');
-var express=require("express");
+const express = require('express')
+const app = express();
 var connection = require('./../config');
+
 // cryptr = new Cryptr('myTotalySecretKey');
  
 module.exports.register=function(req,res){
+
+//Input Type
+//{
+//	"name": "Rohit Kalva",
+//	"username": "rohit",
+//	"email": "rohitk@ovgu.de",
+//	"password": "rohit"
+//}
+
     var today = new Date();
   var encryptedString = cryptr.encrypt(req.body.password);
     var users={
@@ -13,11 +24,12 @@ module.exports.register=function(req,res){
         "password":encryptedString,
         "created_at":today
     }
-    connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
+        connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
       if (error) {
         res.json({
             status:false,
-            message:'there are some error with query'
+	    data: results,
+            message:'User already exists'
         })
       }else{
           res.json({
