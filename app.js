@@ -18,6 +18,9 @@ app.use(function(req, res, next) {
     next();
   });
 
+  var registerController=require('./controllers/register-controller');
+  var authenticateController=require('./controllers/authenticate-controller');
+
   app.post('/api/register',registerController.register);
 
 
