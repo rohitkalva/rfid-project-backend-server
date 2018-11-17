@@ -22,6 +22,7 @@ app.use(function(req, res, next) {
   var authenticateController=require('./controllers/authenticate-controller');
 
   app.post('/api/register',registerController.register);
+  app.post('/api/authenticate',authenticateController.authenticate);
 
 
 //Default Route
