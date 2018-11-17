@@ -2,9 +2,8 @@ const express = require('express')
 const app = express();
 var connection = require('./../config');
 
-module.exports.registration=
 module.exports.app1=function(req, res){
-    const tagid = req.body
+    const tagid = req.body.tagids
     console.log(tagid)
 
     //["11a4b3c243", "11a4b3c245", "11a4b3c247"] JSON Input for the API
