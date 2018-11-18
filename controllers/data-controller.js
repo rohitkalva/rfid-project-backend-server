@@ -59,7 +59,6 @@ module.exports.registration=function(req,res){
     });
 }
 
-
 module.exports.app1=function(req, res){
     const tagid = req.body.tagids
     console.log(tagid)
@@ -67,8 +66,8 @@ module.exports.app1=function(req, res){
     //["11a4b3c243", "11a4b3c245", "11a4b3c247"] JSON Input for the API
 
     //const queryString = "select r.tagid, r.equipment, d.nextinspdate, r.equipment_type, r.labelling from reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?)"
-    const queryString = "select r.tagid, r.equipment, d.nextinspdate, r.equipment_type, r.labelling from reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?) AND d.nextinspdate=( select max(nextinspdate) from dates where tagid IN (?));"
-    connection.query(queryString, [tagid,tagid], (err, result, fields) => {
+    const queryString = "SELECT r.tagid, r.equipment,d.nextinspdate, r.equipment_type, r.labelling FROM reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?) AND d.nextinspdate = (SELECT MAX(d1.nextinspdate) FROM dates d1 WHERE d1.tagid = r.tagid)"
+    connection.query(queryString, [tagid], (err, result, fields) => {
       
       if(err){
       console.log("Failed to query " + err)
@@ -87,6 +86,15 @@ module.exports.app1=function(req, res){
 module.exports.app2=function(req,res){
 
   console.log(req.body); 
+
+  // Sample response
+  // {
+  //   "tagid": "1143243",
+  //   "test_result": "1",
+  //   "remarks": "Everything looks good",
+  //   "username":"demouser",
+  //   "nextinspdate": "2020-03-22"
+  // }
   
   const tagid = req.body.tagid;
   const test_result = req.body.test_result;
