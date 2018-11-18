@@ -77,7 +77,7 @@ module.exports.app1=function(req, res){
       console.log("Fetch Succesful")
       //res.json(rows)
 
-      return res.send({ error: false, data: result, message: 'Entry Successful!' });
+      return res.send({ error: false, data: result, message: 'Fetch Successful!' });
       })
     }
 
