@@ -114,7 +114,7 @@ module.exports.app2=function(req,res){
           });
         }
      
-        var query1 = "UPDATE inspection SET nextinspdate = ? WHERE tagid =?"
+        var query1 = "UPDATE registration SET nextinspdate = ? WHERE tagid =?"
      
         connection.query(query1, [nextinspdate, tagid], function(err,result) {
           if (err) { 
