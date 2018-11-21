@@ -66,7 +66,7 @@ module.exports.app1=function(req, res){
     //["11a4b3c243", "11a4b3c245", "11a4b3c247"] JSON Input for the API
 
     //const queryString = "select r.tagid, r.equipment, d.nextinspdate, r.equipment_type, r.labelling from reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?)"
-    const queryString = "SELECT r.tagid, r.nextinspdate, r.labelling, i.test_result, i.remarks, i.inspdate FROM registration r JOIN inspection i WHERE r.tagid = i.tagid AND r.tagid IN (?) AND i.inspdate = (SELECT MAX(d.inspdate) FROM inspection d WHERE d.tagid = r.tagid);"
+    const queryString = "SELECT r.tagid, r.nextinspdate, r.labelling, i.equipment_status, i.remarks, i.inspdate FROM registration r JOIN inspection i WHERE r.tagid = i.tagid AND r.tagid IN (?) AND i.inspdate = (SELECT MAX(d.inspdate) FROM inspection d WHERE d.tagid = r.tagid);"
     connection.query(queryString, [tagid], (err, result, fields) => {
       
       if(err){
@@ -90,24 +90,24 @@ module.exports.app2=function(req,res){
   // Sample response
   // {
   //   "tagid": "1143243",
-  //   "test_result": "1",
+  //   "equipment_status": "1",
   //   "remarks": "Everything looks good",
   //   "username":"demouser",
   //   "nextinspdate": "2020-03-22"
   // }
   
   const tagid = req.body.tagid;
-  const test_result = req.body.test_result;
+  const equipment_status = req.body.equipment_status;
   const remarks = req.body.remarks;
   const username = req.body.username;
   const nextinspdate = req.body.nextinspdate;
   var today = new Date();
-  var queryString ='INSERT INTO inspection (tagid, test_result, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
+  var queryString ='INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
 
 
   connection.beginTransaction(function(err) {
       if (err) { throw err; }
-      connection.query(queryString, [tagid, test_result, today,remarks, username], function(err,result) {
+      connection.query(queryString, [tagid, equipment_status, today,remarks, username], function(err,result) {
         if (err) { 
           connection.rollback(function() {
             throw err;
