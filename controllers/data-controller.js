@@ -102,6 +102,10 @@ module.exports.app2=function(req,res){
   const username = req.body.username;
   const nextinspdate = req.body.nextinspdate;
   var today = new Date();
+
+  var newinspdate = nextinspdate.split("/").reverse().join("-");
+  console.log("Date:>>"+newinspdate); 
+
   var queryString ='INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
 
 
@@ -116,7 +120,7 @@ module.exports.app2=function(req,res){
      
         var query1 = "UPDATE registration SET nextinspdate = ? WHERE tagid =?"
      
-        connection.query(query1, [nextinspdate, tagid], function(err,result) {
+        connection.query(query1, [newinspdate, tagid], function(err,result) {
           if (err) { 
             connection.rollback(function() {
               throw err;
