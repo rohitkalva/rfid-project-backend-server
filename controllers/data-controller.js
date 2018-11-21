@@ -66,7 +66,7 @@ module.exports.app1=function(req, res){
     //["11a4b3c243", "11a4b3c245", "11a4b3c247"] JSON Input for the API
 
     //const queryString = "select r.tagid, r.equipment, d.nextinspdate, r.equipment_type, r.labelling from reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?)"
-    const queryString = "SELECT r.tagid, r.equipment,d.nextinspdate, r.equipment_type, r.labelling FROM reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?) AND d.nextinspdate = (SELECT MAX(d1.nextinspdate) FROM dates d1 WHERE d1.tagid = r.tagid)"
+    const queryString = "SELECT r.tagid, r.nextinspdate, r.labelling, i.test_result, i.remarks, i.inspdate FROM registration r JOIN inspection i WHERE r.tagid = i.tagid AND r.tagid IN (?) AND i.inspdate = (SELECT MAX(d.inspdate) FROM inspection d WHERE d.tagid = r.tagid);"
     connection.query(queryString, [tagid], (err, result, fields) => {
       
       if(err){
