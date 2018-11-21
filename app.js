@@ -24,9 +24,9 @@ app.use(function(req, res, next) {
 
   app.post('/api/register',registerController.register);
   app.post('/api/authenticate',authenticateController.authenticate);
-  app.post('/api/app1', dataController.app1);
+  app.post('/api/app/get', dataController.app1);
   app.post('/api/registration',dataController.registration);
-  app.post('/api/app2', dataController.app2);
+  app.post('/api/app/post', dataController.app2);
 
 
 

@@ -102,21 +102,21 @@ module.exports.app2=function(req,res){
   const username = req.body.username;
   const nextinspdate = req.body.nextinspdate;
   var today = new Date();
-  var queryString ='INSERT INTO insp (tagid, test_result, remarks, username, inspdate) VALUES (?, ?, ?, ?, ?)'
+  var queryString ='INSERT INTO inspection (tagid, test_result, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
 
 
   connection.beginTransaction(function(err) {
       if (err) { throw err; }
-      connection.query(queryString, [tagid, test_result, remarks, username, today], function(err,result) {
+      connection.query(queryString, [tagid, test_result, today,remarks, username], function(err,result) {
         if (err) { 
           connection.rollback(function() {
             throw err;
           });
         }
      
-        var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
+        var query1 = "UPDATE inspection SET nextinspdate = ? WHERE tagid =?"
      
-        connection.query(query1, [tagid, nextinspdate], function(err,result) {
+        connection.query(query1, [nextinspdate, tagid], function(err,result) {
           if (err) { 
             connection.rollback(function() {
               throw err;
