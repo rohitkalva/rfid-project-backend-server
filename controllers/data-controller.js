@@ -36,10 +36,11 @@ module.exports.registration=function(req,res){
       if (err) { throw err; }
       connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, nextinspdate], function(err,result) {
         if (err) { 
+          connection.end();
           connection.rollback(function() {
             throw err;
           });
-          connection.end();
+
         }
      
         var query1 = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
