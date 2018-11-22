@@ -40,7 +40,7 @@ module.exports.registration=function(req,res){
           connection.rollback(function() {
             throw err;
           });
-
+          return res.send({ error: err, data: result, message: 'Entry Unsuccessful!' });
         }
      
         var query1 = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
@@ -58,8 +58,7 @@ module.exports.registration=function(req,res){
               });
             }
             console.log('Transaction Complete.');
-            return res.send({ error: err, data: result, message: 'Entry Successful!' });
-            connection.end();
+            return res.send({ error: err, data: result, message: 'Entry Successful!' });            
           });
         });
       });
@@ -120,9 +119,11 @@ module.exports.updatetagdata=function(req,res){
       if (err) { throw err; }
       connection.query(queryString, [tagid, equipment_status, today,remarks, username], function(err,result) {
         if (err) { 
+          connection.end();
           connection.rollback(function() {
             throw err;
           });
+          return res.send({ error: err, data: result, message: 'Entry Unsuccessful!' });
         }
      
         var query1 = "UPDATE registration SET nextinspdate = ? WHERE tagid =?"
@@ -141,7 +142,6 @@ module.exports.updatetagdata=function(req,res){
             }
             console.log('Transaction Complete.');
             return res.send({ error: false, data: result, message: 'Entry Successful!' });
-            connection.end();
           });
         });
       });
