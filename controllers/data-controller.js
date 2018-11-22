@@ -15,7 +15,12 @@ module.exports.registration=function(req,res){
   const orderdate = req.body.orderdate;
   const equipment_type = req.body.equipment_type;
   const labelling = req.body.labelling;
-  var queryString ='INSERT INTO reg (tagid, equipment, orderdate, equipment_type, labelling) VALUES (?, ?, ?, ?, ?)'
+  const nextinspdate = req.body.nextinspdate;
+  const equipment_status = "functional";
+  const remarks = "New registration";
+  const username = req.body.username;
+  var today = new Date();
+  var queryString ='INSERT INTO registration (tagid, equipment, orderdate, equipment_type, labelling, nextinspdate) VALUES (?, ?, ?, ?, ?,?)'
 
   // connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
   //     if (err) throw err;
@@ -29,16 +34,16 @@ module.exports.registration=function(req,res){
 
   connection.beginTransaction(function(err) {
       if (err) { throw err; }
-      connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
+      connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, nextinspdate], function(err,result) {
         if (err) { 
           connection.rollback(function() {
             throw err;
           });
         }
      
-        var query1 = "INSERT INTO dates (tagid, nextinspdate) VALUES (?, ?)"
+        var query1 = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
      
-        connection.query(query1, [tagid, orderdate], function(err,result) {
+        connection.query(query1, [tagid, equipment_status,  today, remarks, username ], function(err,result) {
           if (err) { 
             connection.rollback(function() {
               throw err;
@@ -51,7 +56,7 @@ module.exports.registration=function(req,res){
               });
             }
             console.log('Transaction Complete.');
-            return res.send({ error: false, data: result, message: 'Entry Successful!' });
+            return res.send({ error: err, data: result, message: 'Entry Successful!' });
             connection.end();
           });
         });
