@@ -39,6 +39,7 @@ module.exports.registration=function(req,res){
           connection.rollback(function() {
             throw err;
           });
+          connection.end();
         }
      
         var query1 = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
