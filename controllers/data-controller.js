@@ -19,7 +19,7 @@ module.exports.registration=function(req,res){
   const equipment_status = "functional";
   const remarks = "New registration";
   const username = req.body.username;
-  var today = new Date();
+  //var today = new Date();
   var queryString ='INSERT INTO registration (tagid, equipment, orderdate, equipment_type, labelling, nextinspdate) VALUES (?, ?, ?, ?, ?,?)'
 
   // connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
@@ -43,9 +43,9 @@ module.exports.registration=function(req,res){
           return res.send({ error: err, data: result, message: 'Entry Unsuccessful!' });
         }
      
-        var query1 = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
+        var query1 = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, now(), ?, ?)'
      
-        connection.query(query1, [tagid, equipment_status,  today, remarks, username ], function(err,result) {
+        connection.query(query1, [tagid, equipment_status, remarks, username ], function(err,result) {
           if (err) { 
             connection.rollback(function() {
               throw err;
@@ -107,17 +107,17 @@ module.exports.updatetagdata=function(req,res){
   const remarks = req.body.remarks;
   const username = req.body.username;
   const nextinspdate = req.body.nextinspdate;
-  var today = new Date();
+  //var today = 'now()';
 
   var newinspdate = nextinspdate.split("/").reverse().join("-");
   // console.log("Date:>>"+newinspdate); 
 
-  var queryString ='INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
+  var queryString ='INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, now(), ?, ?)'
 
 
   connection.beginTransaction(function(err) {
       if (err) { throw err; }
-      connection.query(queryString, [tagid, equipment_status, today,remarks, username], function(err,result) {
+      connection.query(queryString, [tagid, equipment_status,remarks, username], function(err,result) {
         if (err) { 
           connection.end();
           connection.rollback(function() {
