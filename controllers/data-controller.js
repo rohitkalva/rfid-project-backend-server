@@ -59,7 +59,7 @@ module.exports.registration=function(req,res){
     });
 }
 
-module.exports.app1=function(req, res){
+module.exports.gettagdata=function(req, res){
     const tagid = req.body.tagids
     console.log(tagid)
 
@@ -83,7 +83,7 @@ module.exports.app1=function(req, res){
 
 
 
-module.exports.app2=function(req,res){
+module.exports.updatetagdata=function(req,res){
 
   console.log(req.body); 
 
@@ -104,7 +104,7 @@ module.exports.app2=function(req,res){
   var today = new Date();
 
   var newinspdate = nextinspdate.split("/").reverse().join("-");
-  console.log("Date:>>"+newinspdate); 
+  // console.log("Date:>>"+newinspdate); 
 
   var queryString ='INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, ?, ?, ?)'
 
