@@ -22,11 +22,11 @@ app.use(function(req, res, next) {
   var authenticateController=require('./controllers/authenticate-controller');
   var dataController=require('./controllers/data-controller')
 
-  app.post('/api/register',registerController.register);
-  app.post('/api/authenticate',authenticateController.authenticate);
-  app.post('/api/app/get', dataController.app1);
-  app.post('/api/registration',dataController.registration);
-  app.post('/api/app/post', dataController.app2);
+  app.post('/api/register',registerController.register); //user registration
+  app.post('/api/authenticate',authenticateController.authenticate); //user authentication
+  app.post('/api/app/gettagdata', dataController.gettagdata); //get tag data in the app
+  app.post('/api/registration',dataController.registration); //new equipment registration
+  app.post('/api/app/updatetagdata', dataController.updatetagdata); //update tag data post inspection
 
 
 
