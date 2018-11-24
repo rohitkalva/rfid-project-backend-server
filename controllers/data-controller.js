@@ -151,12 +151,17 @@ module.exports.updatetagdata=function(req,res){
 
 
 module.exports.getreport=function(req,res){
-//
+console.log(req.body)
+//body content
+// {
+//      "fromdate":"2018-11-20",
+//	"todate": "2018-11-25"
+// }
 var fromdate = req.body.fromdate;
 var todate = req.body.todate;
 
 const queryString = "SELECT @a:=@a+1 as S_No, r.tagid, r.labelling, i.inspdate, i.equipment_status, i.remarks, i.username FROM registration r JOIN inspection i,(select @a:=0) initvars WHERE r.tagid = i.tagid AND (inspdate between ? AND ?)"
-    connection.query(queryString, [fromdate],[todate], (err, result, fields) => {
+    connection.query(queryString, [fromdate,todate], (err, result, fields) => {
       
       if(err){
       console.log("Failed to query " + err)
