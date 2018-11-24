@@ -147,3 +147,25 @@ module.exports.updatetagdata=function(req,res){
       });
     });
 }
+
+
+
+module.exports.getreport=function(req,res){
+//
+var fromdate = req.body.fromdate;
+var todate = req.body.todate;
+
+const queryString = "SELECT @a:=@a+1 as S_No, r.tagid, r.labelling, i.inspdate, i.equipment_status, i.remarks, i.username FROM registration r JOIN inspection i,(select @a:=0) initvars WHERE r.tagid = i.tagid AND (inspdate between ? AND ?)"
+    connection.query(queryString, [fromdate],[todate], (err, result, fields) => {
+      
+      if(err){
+      console.log("Failed to query " + err)
+      res.sendStatus(500)
+       return
+      }
+      console.log("Fetch Succesful")
+      //res.json(rows)
+
+      return res.send({ error: false, data: result, message: 'Fetch Successful!' });
+      })
+}
