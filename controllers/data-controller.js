@@ -160,7 +160,7 @@ console.log(req.body)
 var fromdate = req.body.fromdate;
 var todate = req.body.todate;
 
-const queryString = "SELECT @a:=@a+1 as S_No, r.tagid, r.labelling, i.inspdate, i.equipment_status, i.remarks, i.username FROM registration r JOIN inspection i,(select @a:=0) initvars WHERE r.tagid = i.tagid AND (inspdate between ? AND ?)"
+const queryString = " select @a:=@a+1 as SNo, r.tagid as TagID, r.labelling as Label, Date (i.inspdate) as Inspection_Date, i.equipment_status as Test_Result, i.remarks as Remarks, i.username as User from registration r JOIN inspection i,(select @a:=0) initvars where r.tagid = i.tagid AND (i.inspdate between ? AND ?)"
     connection.query(queryString, [fromdate,todate], (err, result, fields) => {
       
       if(err){
