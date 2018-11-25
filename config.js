@@ -4,7 +4,8 @@ var connection = mysql.createConnection({
     host: 'localhost',
     user: 'rfid',
     password: 'rfidproject',
-    database: 'rfid'
+    database: 'rfid',
+    dateStrings: true
 })
 
 connection.connect(function (err) {
