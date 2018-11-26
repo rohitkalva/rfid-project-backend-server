@@ -202,3 +202,31 @@ module.exports.getreport = function (req, res) {
     });
   })
 }
+
+module.exports.updateolddata = function (req, res) {
+   console.log(req.body)
+  
+    var jsondata = req.body;
+    var values = [];
+     
+     for(var i=0; i< jsondata.length; i++)
+     values.push([jsondata[i].tagid,jsondata[i].Test_Result, jsondata[i].Inspection_Date, jsondata[i].Remarks, jsondata[i].User])
+
+  const queryString ="INSERT INTO inspection(tagid,equipment_status,inspdate,remarks,username) VALUES ?"
+  connection.query(queryString, [values], (err, result, fields) => {
+
+    if (err) {
+      console.log("Failed to query " + err)
+      res.sendStatus(500)
+      return
+    }
+    console.log("Entry Succesful")
+    //res.json(rows)
+
+    return res.send({
+      error: false,
+      data: result,
+      message: 'Entry Successful!'
+    });
+  })
+}
