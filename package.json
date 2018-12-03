@@ -1,5 +1,5 @@
 {
-  "name": "nodejs_api",
+  "name": "Rfid Project Server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -20,7 +20,6 @@
     "forever": "^0.15.3",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
-    "mysql2": "^1.6.4",
-    "ssh2": "^0.6.1"
+    "mysql2": "^1.6.4"
   }
 }
