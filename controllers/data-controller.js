@@ -3,24 +3,42 @@ const app = express();
 var connection = require('./../config');
 
 
-module.exports.registration = function (req, res) {
+module.exports.registration_data = function (req, res) {
 
   console.log(req.body);
   // var jsondata = req.body;
   // var values = [];
   // for(var i=0; i< jsondata.length; i++)
   //   values.push([jsondata[i].tagid,jsondata[i].equipment, jsondata[i].orderdate, jsondata[i].equipment_type, jsondata[i].labelling])
+  const manufacturer = req.body.manufacturer;
+  const model = req.body.model;
+  const variant = req.body.variant;
+  const serial_no = req.body.serial_no;
+  const lead_front = req.body.lead_front;
+  const lead_back = req.body.lead_back;
+  const year_of_mfg = req.body.year_of_mfg;
+  const colour = req.body.colour;
+  const size = req.body.size;
+  const length = req.body.length;
   const tagid = req.body.tagid;
-  const equipment = req.body.equipment;
-  const orderdate = req.body.orderdate;
-  const equipment_type = req.body.equipment_type;
-  const labelling = req.body.labelling;
+  const label = req.body.label;
+  const localid = req.body.localid;
+  const clinic = req.body.clinic;
+  const building = req.body.building;
+  const department = req.body.department;
+  const location = req.body.location;
   const nextinspdate = req.body.nextinspdate;
-  const equipment_status = "functional";
-  const remarks = "New registration";
-  const username = req.body.username;
-  //var today = new Date();
-  var queryString = 'INSERT INTO registration (tagid, equipment, orderdate, equipment_type, labelling, nextinspdate) VALUES (?, ?, ?, ?, ?,?)'
+  const touch_test = "ok";
+  const xray_test = "ok";
+  const testremarks = "New Registration";
+  const test_status = "Pass";
+  const user_name = req.body.user_name;
+  const check_interval = "36 Months";
+  const comments = "New Registration";
+
+  var item_data = 'INSERT INTO item_data (manufacturer, model, variant, serial_no, lead_front, lead_back, year_of_mfg, colour, size, length) VALUES (?,?,?,?,?,?,?,?,?,?)'
+  var location_data = 'INSERT INTO location_data (serial_no, tagid, label, localid, clinic, building, department, location, nextinspdate) VALUES (?,?,?,?,?,?,?,?,?)'
+  var test_data = 'INSERT INTO test_data (tagid, touch_test, xray_test, testremarks, test_status, test_date, user_name, check_interval, comments) VALUES (?,?,?,?,?,now(),?,?,?)'
 
   // connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, tagid, orderdate], function(err,result) {
   //     if (err) throw err;
@@ -36,7 +54,7 @@ module.exports.registration = function (req, res) {
     if (err) {
       throw err;
     }
-    connection.query(queryString, [tagid, equipment, orderdate, equipment_type, labelling, nextinspdate], function (err, result) {
+    connection.query(item_data, [manufacturer, model, variant, serial_no, lead_front, lead_back, year_of_mfg, colour, size, length], function (err, result) {
       if (err) {
         connection.end();
         connection.rollback(function () {
@@ -47,29 +65,43 @@ module.exports.registration = function (req, res) {
           data: result,
           message: 'Entry Unsuccessful!'
         });
-      }
+      }  
 
-      var query1 = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, now(), ?, ?)'
-
-      connection.query(query1, [tagid, equipment_status, remarks, username], function (err, result) {
+      connection.query(location_data, [serial_no, tagid, label, localid, clinic, building, department, location, nextinspdate], function (err, result) {
         if (err) {
+          connection.end();
           connection.rollback(function () {
             throw err;
           });
-        }
-        connection.commit(function (err) {
-          if (err) {
-            connection.rollback(function () {
-              throw err;
-            });
-          }
-          console.log('Transaction Complete.');
           return res.send({
             error: err,
             data: result,
-            message: 'Entry Successful!'
+            message: 'Entry Unsuccessful!'
           });
-        });
+        }
+
+        connection.query(test_data, [tagid, touch_test, xray_test, testremarks, test_status, user_name, check_interval, comments], function (err, result) {
+          if (err) {
+            connection.end();
+            connection.rollback(function () {
+              throw err;
+            });
+          } 
+          
+          connection.commit(function (err) {
+            if (err) {
+              connection.rollback(function () {
+                throw err;
+              });
+            }
+            console.log('Transaction Complete.');
+            return res.send({
+              error: err,
+              data: result,
+              message: 'Entry Successful!'
+            });
+          });         
+        });       
       });
     });
   });
@@ -100,7 +132,6 @@ module.exports.gettagdata = function (req, res) {
     });
   })
 }
-
 
 
 module.exports.updatetagdata = function (req, res) {
