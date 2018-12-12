@@ -20,7 +20,12 @@ $ npm start
 
 To run the application without interruption use 
 ```sh
-$ forever app.js
+$ forever start app.js
+```
+
+To stop the running instance with forever
+```sh
+$ forever stop app.js
 ```
 
 # List of API end-points
