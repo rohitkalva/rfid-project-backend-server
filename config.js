@@ -5,7 +5,7 @@ var connection = mysql.createConnection({
 		port: 3306,
         user: 'inka',
         password: '#inkaOvgu2018',
-        database: 'rfid',
+        database: 'rfid_project',
         dateStrings: true
 })
 
