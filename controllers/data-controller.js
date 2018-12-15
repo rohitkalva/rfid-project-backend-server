@@ -108,7 +108,8 @@ module.exports.registration_data = function (req, res) {
 }
 
 module.exports.gettagdata = function (req, res) {
-  const tagid = req.params.tagid
+  const input = req.params.tagid
+  var tagid = input.split(',') //String.prototype.split to query data for multiple tagid's at once. 
   console.log(tagid)
 
   //SQL query to fetch tag information with recent inspected date data.
