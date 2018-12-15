@@ -108,28 +108,31 @@ module.exports.registration_data = function (req, res) {
 }
 
 module.exports.gettagdata = function (req, res) {
-  const tagid = req.body.tagids
+  const tagid = req.params.tagid
   console.log(tagid)
 
-  //["11a4b3c243", "11a4b3c245", "11a4b3c247"] JSON Input for the API
-
-  //const queryString = "select r.tagid, r.equipment, d.nextinspdate, r.equipment_type, r.labelling from reg r JOIN dates d WHERE r.tagid = d.tagid AND r.tagid IN (?)"
-  const queryString = "SELECT r.tagid, r.nextinspdate, r.labelling, i.equipment_status, i.remarks, i.inspdate FROM registration r JOIN inspection i WHERE r.tagid = i.tagid AND r.tagid IN (?) AND i.inspdate = (SELECT MAX(d.inspdate) FROM inspection d WHERE d.tagid = r.tagid);"
+  //SQL query to fetch tag information with recent inspected date data.
+  const queryString = `SELECT  l.tagid, i.serial_no, i.manufacturer, i.model, i.variant,  i.colour, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, t.touch_test, t.xray_test, t.testremarks, t.test_status, DATE (t.test_date) as Test_Date, t.check_interval, DATE(l.nextinspdate) as Next_Check, t.comments
+  FROM item_data i, location_data l, test_data t
+  WHERE i.serial_no = l.serial_no AND l.tagid = t.tagid AND t.tagid IN (?) AND t.test_date = (SELECT MAX(x.test_date) FROM test_data x WHERE x.tagid = t.tagid)`
   connection.query(queryString, [tagid], (err, result, fields) => {
 
     if (err) {
       console.log("Failed to query " + err)
       res.sendStatus(500)
       return
+    } 
+    //Condition to check if response set is null or not.
+    if (!result.length){
+     return res.send({
+    error: "TagID not present in database."
+    });     
     }
-    console.log("Fetch Succesful")
-    //res.json(rows)
-
-    return res.send({
-      error: false,
-      data: result,
-      message: 'Fetch Successful!'
-    });
+    else
+    return res.json({
+      TagData: result
+    })
+  
   })
 }
 
