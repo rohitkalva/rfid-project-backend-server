@@ -2,7 +2,7 @@
 > A Digital Engineering Inter Disciplinary team project that involves inventory management of radiology equipments at University Klinikum using modern and scalable web architecture and tools.
 
 ## Installation
-Have the below dependencies installed globally on your machine.
+Have the below dependencies installed globally on your machine. `sudo` permission required to execute below installation commands in Linux.
 ```sh
 $ npm install forever --global
 $ npm install nodemon --global
@@ -12,7 +12,7 @@ $ npm install nodemon --global
 This project is built using Node-JS. 
 ```sh
 clone or download the repository
-$ cd project directory
+$ cd project_directory
 $ npm install
 $ npm start
 ```
@@ -56,5 +56,47 @@ The response samples as presented here are basically sample of the response and 
 					 "nextinspdate" : "2021-12-12",
 					 "user_name" : "kalva"
                     }
+
+    Response Sample: {
+                        "error": null,
+                        "data": {
+                        "fieldCount": 0,
+                        "affectedRows": 1,
+                        "insertId": 0,
+                        "serverStatus": 3,
+                        "warningCount": 0,
+                        "message": "",
+                        "protocol41": true,
+                        "changedRows": 0
+                        },
+                        "message": "Entry Successful!"
+                    }
+
+## URL: /api/app/gettagdata/:tagid
+    METHOD : GET
+    DESCRIPTION: The end point to fetch the data for individual tagid.
+    Response Sample: {"TagData": [{
+							"tagid": "112233445566778899",
+							"serial_no": "167260000012",
+							"manufacturer": "Mavig",
+							"model": "RA660",
+							"variant": "M",
+							"colour": "Indian Summer",
+							"label": "Prox X-Ray",
+							"Identification": "KRN-001",
+							"clinic": "Radiologie",
+							"building": "60a",
+							"department": "Angio",
+							"location": "Angio 3 / Raum 123",
+							"touch_test": "ok",
+							"xray_test": "ok",
+							"testremarks": "NA",
+							"test_status": "Pass",
+							"Test_Date": "2018-12-15",
+							"check_interval": "12 Months",
+							"Next_Check": "2019-12-02",
+							"comments": "Everything is good."
+						}]
+					}
 
 
