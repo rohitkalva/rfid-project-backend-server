@@ -75,6 +75,12 @@ The response samples as presented here are basically sample of the response and 
 ## URL: /api/app/gettagdata/:tagid
     METHOD : GET
     DESCRIPTION: The end point to fetch the data for individual tagid.
+
+Requests can also be sent using be below format where the tagid's are separated by a ',' to get response at once.
+```ssh
+http://localhost:1080/api/app/gettagdata/tagid1,tagid2
+```
+	
     Response Sample: {"TagData": [{
 							"tagid": "112233445566778899",
 							"serial_no": "167260000012",
