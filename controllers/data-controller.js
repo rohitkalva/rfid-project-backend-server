@@ -141,34 +141,26 @@ module.exports.gettagdata = function (req, res) {
 module.exports.updatetagdata = function (req, res) {
 
   console.log(req.body);
-
-  // Sample response
-  // {
-  //   "tagid": "1143243",
-  //   "equipment_status": "1",
-  //   "remarks": "Everything looks good",
-  //   "username":"demouser",
-  //   "nextinspdate": "2020-03-22"
-  // }
-
   const tagid = req.body.tagid;
-  const equipment_status = req.body.equipment_status;
-  const remarks = req.body.remarks;
-  const username = req.body.username;
+  const touch_test = req.body.touch_test;
+  const xray_test = req.body.xray_test;
+  const testremarks = req.body.testremarks;
+  const test_status = req.body.test_status;
+  const user_name = req.body.user_name;
+  const check_interval = req.body.check_interval;
+  const comments = req.body.comments;
   const nextinspdate = req.body.nextinspdate;
   //var today = 'now()';
 
-  var newinspdate = nextinspdate.split("/").reverse().join("-");
+  // var newinspdate = nextinspdate.split("/").reverse().join("-");
   // console.log("Date:>>"+newinspdate); 
-
-  var queryString = 'INSERT INTO inspection (tagid, equipment_status, inspdate, remarks, username) VALUES (?, ?, now(), ?, ?)'
-
 
   connection.beginTransaction(function (err) {
     if (err) {
       throw err;
     }
-    connection.query(queryString, [tagid, equipment_status, remarks, username], function (err, result) {
+    var test_data = 'INSERT INTO test_data (tagid, touch_test, xray_test, testremarks, test_status, test_date, user_name, check_interval, comments) VALUES (?,?,?,?,?,now(),?,?,?)'
+    connection.query(test_data, [tagid, touch_test, xray_test, testremarks, test_status, user_name, check_interval, comments], function (err, result) {
       if (err) {
         connection.end();
         connection.rollback(function () {
@@ -181,9 +173,9 @@ module.exports.updatetagdata = function (req, res) {
         });
       }
 
-      var query1 = "UPDATE registration SET nextinspdate = ? WHERE tagid =?"
+      var location_data = "UPDATE location_data SET nextinspdate = ? WHERE tagid =?"
 
-      connection.query(query1, [newinspdate, tagid], function (err, result) {
+      connection.query(location_data, [nextinspdate, tagid], function (err, result) {
         if (err) {
           connection.rollback(function () {
             throw err;
@@ -198,7 +190,6 @@ module.exports.updatetagdata = function (req, res) {
           console.log('Transaction Complete.');
           return res.send({
             error: false,
-            data: result,
             message: 'Entry Successful!'
           });
         });
