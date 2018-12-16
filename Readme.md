@@ -106,3 +106,22 @@ http://localhost:1080/api/app/gettagdata/tagid1,tagid2
 					}
 
 
+## URL: /api/app/updatetagdata
+    METHOD : POST
+    DESCRIPTION: To update tag relavent data post inspection.
+	Request Sample: {
+					"tagid" : "112233445566778899",
+					"touch_test" : "ok",
+					"xray_test" : "ok",
+					"testremarks" : "ok",
+					"test_status" : "Pass",
+					"user_name"  : "kalva",
+					"check_interval" : "14 Months",
+					"comments" : "Good Condition",
+					"nextinspdate" : "2020-12-16"
+					}
+
+	Response Sample: {
+					"error": false,
+					"message": "Entry Successful!"
+					}
