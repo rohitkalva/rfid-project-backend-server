@@ -210,7 +210,12 @@ module.exports.getreport = function (req, res) {
   var fromdate = req.body.fromdate;
   var todate = req.body.todate;
 
-  const queryString = " select @a:=@a+1 as SNo, r.tagid as TagID, r.labelling as Label, Date (i.inspdate) as Inspection_Date, i.equipment_status as Test_Result, i.remarks as Remarks, i.username as User from registration r JOIN inspection i,(select @a:=0) initvars where r.tagid = i.tagid AND (i.inspdate between ? AND ?)"
+  // const queryString = " select @a:=@a+1 as SNo, r.tagid as TagID, r.labelling as Label, Date (i.inspdate) as Inspection_Date, i.equipment_status as Test_Result, i.remarks as Remarks, i.username as User from registration r JOIN inspection i,(select @a:=0) initvars where r.tagid = i.tagid AND (i.inspdate between ? AND ?)"
+  const queryString = `SELECT @a := @a+1 as SNo, z.* 
+  FROM(SELECT i.manufacturer, i.model, i.variant, i.serial_no, l.tagid, i.lead_front, i.lead_back, i.year_of_mfg as Year, i.colour, i.size, i.length, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, t.touch_test, t.xray_test, t.testremarks, t.test_status, date (t.test_date) as Test_Date, t.user_name, t.check_interval, DATE(l.nextinspdate) as Next_Check, t.comments
+  FROM item_data i JOIN location_data l JOIN test_data t 
+  WHERE i.serial_no = l.serial_no AND l.tagid = t.tagid AND t.test_date between ? AND ? ORDER BY t.test_date ASC)z, 
+  (SELECT @a:=0)y;` 
   connection.query(queryString, [fromdate, todate], (err, result, fields) => {
 
     if (err) {
@@ -219,13 +224,17 @@ module.exports.getreport = function (req, res) {
       return
     }
     console.log("Fetch Succesful")
+    // console.log(result)
     //res.json(rows)
 
-    return res.send({
-      error: false,
-      data: result,
-      message: 'Fetch Successful!'
-    });
+    // return res.send({
+    //   error: false,
+    //   data: result,
+    //   message: 'Fetch Successful!'
+    // });
+    return res.json({
+    report: result
+    })
   })
 }
 
