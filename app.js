@@ -28,6 +28,7 @@ app.get('/api/app/gettagdata/:tagid', dataController.gettagdata); //get tag data
 app.post('/api/registration', dataController.registration_data); //new equipment registration
 app.post('/api/app/updatetagdata', dataController.updatetagdata); //update tag data post inspection
 app.post('/api/getreport', dataController.getreport); //fetch report between date ranges
+app.post('/api/futureinspection', dataController.futureinspection); //fetch report for future inspections
 app.post('/api/updateolddata', dataController.updateolddata)
 
 
