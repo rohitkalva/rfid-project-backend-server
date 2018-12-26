@@ -29,9 +29,14 @@ app.post('/api/registration', dataController.registration_data); //new equipment
 app.post('/api/app/updatetagdata', dataController.updatetagdata); //update tag data post inspection
 app.post('/api/getreport', dataController.getreport); //fetch report between date ranges
 app.post('/api/futureinspection', dataController.futureinspection); //fetch report for future inspections
+app.post('/app/imageupload/:tagid', dataController.imageupload) //Post API to upload image
 app.post('/api/updateolddata', dataController.updateolddata)
 
 
+// app.get('/download', function(req, res){
+//     var file = './public/uploads/26-12-2018/111133B2DDD9014000000000-1545842116601.jpg';
+//     res.download(file); // Set disposition and send it.
+//   });
 
 //Default Route
 app.get("/", (req, res) => {

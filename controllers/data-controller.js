@@ -1,6 +1,9 @@
 const express = require('express')
 const app = express();
 var connection = require('./../config');
+const multer = require('multer');
+const path = require('path');
+
 
 
 module.exports.registration_data = function (req, res) {
@@ -65,7 +68,7 @@ module.exports.registration_data = function (req, res) {
           data: result,
           message: 'Entry Unsuccessful!'
         });
-      }  
+      }
 
       connection.query(location_data, [serial_no, tagid, label, localid, clinic, building, department, location, nextinspdate], function (err, result) {
         if (err) {
@@ -86,8 +89,8 @@ module.exports.registration_data = function (req, res) {
             connection.rollback(function () {
               throw err;
             });
-          } 
-          
+          }
+
           connection.commit(function (err) {
             if (err) {
               connection.rollback(function () {
@@ -100,8 +103,8 @@ module.exports.registration_data = function (req, res) {
               data: result,
               message: 'Entry Successful!'
             });
-          });         
-        });       
+          });
+        });
       });
     });
   });
@@ -122,18 +125,17 @@ module.exports.gettagdata = function (req, res) {
       console.log("Failed to query " + err)
       res.sendStatus(500)
       return
-    } 
-    //Condition to check if response set is null or not.
-    if (!result.length){
-     return res.send({
-    error: "TagID not present in database."
-    });     
     }
-    else
-    return res.json({
-      TagData: result
-    })
-  
+    //Condition to check if response set is null or not.
+    if (!result.length) {
+      return res.send({
+        error: "TagID not present in database."
+      });
+    } else
+      return res.json({
+        TagData: result
+      })
+
   })
 }
 
@@ -215,7 +217,7 @@ module.exports.getreport = function (req, res) {
   FROM(SELECT i.manufacturer, i.model, i.variant, i.serial_no, l.tagid, i.lead_front, i.lead_back, i.year_of_mfg as Year, i.colour, i.size, i.length, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, t.touch_test, t.xray_test, t.testremarks, t.test_status, date (t.test_date) as Test_Date, t.user_name, t.check_interval, DATE(l.nextinspdate) as Next_Check, t.comments
   FROM item_data i JOIN location_data l JOIN test_data t 
   WHERE i.serial_no = l.serial_no AND l.tagid = t.tagid AND t.test_date between ? AND ? ORDER BY t.test_date ASC)z, 
-  (SELECT @a:=0)y;` 
+  (SELECT @a:=0)y;`
   connection.query(queryString, [fromdate, todate], (err, result, fields) => {
 
     if (err) {
@@ -233,21 +235,21 @@ module.exports.getreport = function (req, res) {
     //   message: 'Fetch Successful!'
     // });
     return res.json({
-    report: result
+      report: result
     })
   })
 }
 
 module.exports.updateolddata = function (req, res) {
-   console.log(req.body)
-  
-    var jsondata = req.body;
-    var values = [];
-     
-     for(var i=0; i< jsondata.length; i++)
-     values.push([jsondata[i].tagid,jsondata[i].Test_Result, jsondata[i].Inspection_Date, jsondata[i].Remarks, jsondata[i].User])
+  console.log(req.body)
 
-  const queryString ="INSERT INTO inspection(tagid,equipment_status,inspdate,remarks,username) VALUES ?"
+  var jsondata = req.body;
+  var values = [];
+
+  for (var i = 0; i < jsondata.length; i++)
+    values.push([jsondata[i].tagid, jsondata[i].Test_Result, jsondata[i].Inspection_Date, jsondata[i].Remarks, jsondata[i].User])
+
+  const queryString = "INSERT INTO inspection(tagid,equipment_status,inspdate,remarks,username) VALUES ?"
   connection.query(queryString, [values], (err, result, fields) => {
 
     if (err) {
@@ -281,7 +283,7 @@ module.exports.futureinspection = function (req, res) {
   FROM(SELECT i.manufacturer, i.model, i.serial_no, l.tagid, i.year_of_mfg as Year, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, date (t.test_date) as Test_Date, t.user_name, t.check_interval, DATE(l.nextinspdate) as Next_Check
   FROM item_data i JOIN location_data l JOIN test_data t 
   WHERE i.serial_no = l.serial_no AND l.tagid = t.tagid AND l.nextinspdate between ? AND ? ORDER BY l.nextinspdate ASC)z, 
-  (SELECT @a:=0)y;` 
+  (SELECT @a:=0)y;`
   connection.query(queryString, [fromdate, todate], (err, result, fields) => {
 
     if (err) {
@@ -299,7 +301,66 @@ module.exports.futureinspection = function (req, res) {
     //   message: 'Fetch Successful!'
     // });
     return res.json({
-    report: result
+      report: result
     })
   })
+}
+
+module.exports.imageupload = function (req, res) {
+
+  var date = new Date();
+  var y = date.getFullYear(),
+    m = date.getMonth() + 1, // january is month 0 in javascript
+    d = date.getDate();
+  var pad = function (val) {
+    var str = val.toString();
+    return str.length < 2 ? "0" + str : str;
+  };
+  date = [pad(d), pad(m), y].join("-")
+
+  // Set The Storage Engine
+  const storage = multer.diskStorage({
+    destination: './public/uploads/' + date + '/',
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+  });
+
+  const tagid = req.params.tagid
+  console.log(tagid)
+
+  // Init Upload
+  const upload = multer({
+    storage: storage,
+    limits: {
+      fileSize: 1000000
+    },
+  }).single(tagid);
+
+  upload(req, res, (err) => {
+    // console.log(req.file)
+    var file_name = req.file.filename
+    const file_path = req.file.destination + req.file.filename
+    
+    const image_data = 'INSERT INTO image_data (tagid, test_date, file_name, file_path) VALUES (?, now(), ?, ?)'
+    connection.query(image_data, [tagid, file_name, file_path], (err, result, fields) => {
+
+      if (err) {
+        console.log("Failed to query " + err)
+        res.sendStatus(500)
+        return
+      }
+      return res.send({
+          message: 'Upload Successful'
+        });
+    })
+    
+    // if (err) {
+    //   throw err
+    // }
+    // return res.send({
+    //   message: 'Upload Successful'
+    // });
+  });
+
 }
