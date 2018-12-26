@@ -34,13 +34,19 @@ app.post('/app/imageupload/:tagid', dataController.imageupload) //Post API to up
 app.post('/api/updateolddata', dataController.updateolddata)
 
 
-app.get('/download', function(req, res){
+// app.get('/download/:url/:url1/:url2/:file', function(req, res){
 
-    var destination = fs.realpathSync('111133B2DDD9014000000000.jpg', []);
-    // var file = './public/uploads/26-12-2018/111133B2DDD9014000000000-1545842116601.jpg';
-    // res.download(file); // Set disposition and send it.
-    console.log(destination)
-  });
+//     const url = req.params.url
+//     const url1 = req.params.url1
+//     const url2 = req.params.url2
+//     const file = req.params.file
+//     const link = "./" + url + "/" + url1 + "/" + url2 + "/" + file 
+//     console.log(link)
+//     // var destination = fs.realpathSync('111133B2DDD9014000000000.jpg', []);
+//     // var file = './public/uploads/26-12-2018/111133B2DDD9014000000000-1545842116601.jpg';
+//      res.download(link); // Set disposition and send it.
+//     // console.log(destination)
+//   });
 
 //Default Route
 app.get("/", (req, res) => {
