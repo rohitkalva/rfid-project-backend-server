@@ -102,6 +102,8 @@ http://localhost:1080/api/app/gettagdata/tagid1,tagid2
 							"check_interval": "12 Months",
 							"Next_Check": "2019-12-02",
 							"comments": "Everything is good."
+							"File_name": "111133B2DDD9014000000000-1545848806245.jpg",
+      						"File_path": "./public/uploads/26-12-2018/"
 						}]
 					}
 
@@ -125,3 +127,24 @@ http://localhost:1080/api/app/gettagdata/tagid1,tagid2
 					"error": false,
 					"message": "Entry Successful!"
 					}
+
+
+## URL: /app/imageupload/:tagid
+    METHOD : POST
+    DESCRIPTION: To upload images corresponding to the supplied tagID.
+
+	Response Sample: {
+					"message": "Upload Successful!"
+					}
+
+	Respective details also stored in DB.
+
+
+## URL: /api/app/images/:public/:uploads/:folder/:file_name
+    METHOD : GET
+    DESCRIPTION: The end point to fetch stored images per individual tagid.
+
+	Its a combination of File_path + File_name
+```ssh
+URL Example: /api/app/images/public/uploads/26-12-2018/111133B2DDD9014000000000-1545848806245.jpg
+```
