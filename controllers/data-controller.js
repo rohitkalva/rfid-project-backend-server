@@ -116,7 +116,7 @@ module.exports.gettagdata = function (req, res) {
   console.log(tagid)
 
   //SQL query to fetch tag information with recent inspected date data.
-  const queryString = `SELECT  l.tagid, i.serial_no, i.manufacturer, i.model, i.variant,  i.colour, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, t.touch_test, t.xray_test, t.testremarks, t.test_status, DATE (t.test_date) as Test_Date, t.check_interval, DATE(l.nextinspdate) as Next_Check, t.comments, coalesce(group_concat(im.file_name separator ", "), 'NA') as File_name
+  const queryString = `SELECT  l.tagid, i.serial_no, i.manufacturer, i.model, i.variant,  i.colour, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, t.touch_test, t.xray_test, t.testremarks, t.test_status, DATE (t.test_date) as Test_Date, t.check_interval, DATE(l.nextinspdate) as Next_Check, t.comments, coalesce(group_concat(im.file_name separator ", "), 'NA') as File_name, coalesce(group_concat(distinct im.file_location), 'NA') as File_path
   FROM item_data i, location_data l, test_data t left join image_data im on t.tagid = im.tagid AND date(t.test_date) = date(im.test_date)
   WHERE i.serial_no = l.serial_no AND l.tagid = t.tagid AND t.tagid IN (?) AND t.test_date = (SELECT MAX(x.test_date) FROM test_data x WHERE x.tagid = t.tagid)
   group by l.tagid, i.serial_no, i.manufacturer, i.model, i.variant,  i.colour, l.label, l.localid, l.clinic, l.building, l.department, l.location, t.touch_test, t.xray_test, t.testremarks, t.test_status,t.test_date, t.check_interval, l.nextinspdate, t.comments`
@@ -342,9 +342,10 @@ module.exports.imageupload = function (req, res) {
     // console.log(req.file)
     var file_name = req.file.filename
     const file_path = req.file.destination + req.file.filename
+    const file_location = req.file.destination
     
-    const image_data = 'INSERT INTO image_data (tagid, test_date, file_name, file_path) VALUES (?, now(), ?, ?)'
-    connection.query(image_data, [tagid, file_name, file_path], (err, result, fields) => {
+    const image_data = 'INSERT INTO image_data (tagid, test_date, file_name, file_path, file_location) VALUES (?, now(), ?, ?, ?)'
+    connection.query(image_data, [tagid, file_name, file_path, file_location], (err, result, fields) => {
 
       if (err) {
         console.log("Failed to query " + err)

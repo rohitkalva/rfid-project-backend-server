@@ -3,6 +3,7 @@ const app = express()
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 var connection = require('./config');
+var fs = require('fs');
 
 
 app.use(bodyParser.json())
@@ -33,10 +34,13 @@ app.post('/app/imageupload/:tagid', dataController.imageupload) //Post API to up
 app.post('/api/updateolddata', dataController.updateolddata)
 
 
-// app.get('/download', function(req, res){
-//     var file = './public/uploads/26-12-2018/111133B2DDD9014000000000-1545842116601.jpg';
-//     res.download(file); // Set disposition and send it.
-//   });
+app.get('/download', function(req, res){
+
+    var destination = fs.realpathSync('111133B2DDD9014000000000.jpg', []);
+    // var file = './public/uploads/26-12-2018/111133B2DDD9014000000000-1545842116601.jpg';
+    // res.download(file); // Set disposition and send it.
+    console.log(destination)
+  });
 
 //Default Route
 app.get("/", (req, res) => {
