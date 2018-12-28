@@ -16,7 +16,7 @@ module.exports.authenticate = function (req, res) {
         if (error) {
             res.json({
                 status: false,
-                message: 'there are some error with query'
+                message: 'Connection error'
             })
         } else {
 
@@ -25,19 +25,19 @@ module.exports.authenticate = function (req, res) {
                 if (password == decryptedString) {
                     res.json({
                         status: true,
-                        message: 'successfully authenticated'
+                        message: 'Successful'
                     })
                 } else {
                     res.json({
                         status: false,
-                        message: "Username and password does not match"
+                        message: "Mismatch"
                     });
                 }
 
             } else {
                 res.json({
                     status: false,
-                    message: "User does not exit"
+                    message: "No User"
                 });
             }
         }
