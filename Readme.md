@@ -148,3 +148,44 @@ http://localhost:1080/api/app/gettagdata/tagid1,tagid2
 ```ssh
 URL Example: /api/app/images/public/uploads/26-12-2018/111133B2DDD9014000000000-1545848806245.jpg
 ```
+
+## URL: /api/authenticate
+	METHOD : POST
+    DESCRIPTION: Authenticate user with stored password.
+	Request Sample: {
+    				"username": "username",
+    				"password": "password"
+    				}
+
+	Response Sample: {
+ 					 "status":"true",
+                     "message": "Successful"
+					}
+
+					OR
+
+					{
+ 					 "status":"false",
+                     "message": "Mismatch"
+					}
+
+					OR
+
+					{
+ 					 "status":"false",
+                     "message": "No User"
+					}
+
+
+## URL: /api/register
+	METHOD : POST
+    DESCRIPTION: API for user registration	
+
+	Request Sample: {
+					"email": "email@ovgu.de",
+					"name": "Name",
+					"username": "username",
+					"password": "password"
+					}
+
+	
