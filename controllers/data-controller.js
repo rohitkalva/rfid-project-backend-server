@@ -360,15 +360,15 @@ module.exports.imageupload = function(req, res) {
 
   upload(req, res, err => {
     // console.log(req.file)
-    var file_name = req.file.filename;
-    const file_path = req.file.destination + req.file.filename;
-    const file_location = req.file.destination;
-
+    var file_name = req.file.filename;    
+    const location = req.file.destination;
+    const file_location = location.split("."); //Omiting . from file destination  
+    const file_path = file_location[1] + req.file.filename;
     const image_data =
       "INSERT INTO image_data (tagid, test_date, file_name, file_path, file_location) VALUES (?, now(), ?, ?, ?)";
     connection.query(
       image_data,
-      [tagid, file_name, file_path, file_location],
+      [tagid, file_name, file_path, file_location[1]],
       (err, result, fields) => {
         if (err) {
           console.log("Failed to query " + err);
