@@ -35,6 +35,7 @@ app.get('/api/app/images/:public/:uploads/:folder/:file_name', dataController.im
 app.post('/api/updateolddata', dataController.updateolddata)
 app.get('/api/unamecheck/:username', dataController.unamecheck) //Endpoint to validate username during new user creation
 app.post('/api/user/changepassword', authenticateController.passchange) //Endpoint to update or modify userpassword
+app.get('/api/getdayreport/:date', dataController.getdayreport) //Endpoint to fetch inspection records for given date
 
 //Default Route
 app.get("/", (req, res) => {
