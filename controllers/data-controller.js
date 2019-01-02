@@ -254,6 +254,42 @@ module.exports.getreport = function(req, res) {
   });
 };
 
+module.exports.getdayreport = function(req, res) {
+  console.log(req.params.date);
+  //body content
+  // {
+  //      "fromdate":"2018-11-20",
+  //	"todate": "2018-11-25"
+  // }
+  var date = req.params.date;
+
+  const queryString = `SELECT @a := @a+1 as SNo, z.* 
+  FROM(SELECT i.manufacturer, i.model, i.variant, i.serial_no, l.tagid, i.lead_front, i.lead_back, i.year_of_mfg as Year, i.colour, i.size, i.length, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, td.touch_test, td.xray_test, td.testremarks, td.test_status, date (td.test_date) as Test_Date, td.user_name, td.check_interval, DATE(l.nextinspdate) as Next_Check, td.comments, td.file_name as file_name
+    FROM item_data i, location_data l JOIN (Select t.tagid, t.touch_test, t.xray_test, t.testremarks, t.test_status, t.test_date, t.user_name, t.check_interval, t.comments, coalesce(group_concat(im.file_name separator ", "), 'NA') as file_name  from test_data t left join image_data im ON t.tagid = im.tagid AND date(t.test_date) = date(im.test_date) where date(t.test_date) = ? group by t.tagid, t.touch_test, t.xray_test, t.testremarks, t.test_status, t.test_date, t.user_name, t.check_interval, t.comments) td
+      WHERE i.serial_no = l.serial_no AND l.tagid = td.tagid
+    ORDER BY td.test_date ASC )z, 
+  (SELECT @a:=0)y`
+  connection.query(queryString, [date], (err, result, fields) => {
+    if (err) {
+      console.log("Failed to query " + err);
+      res.sendStatus(500);
+      return;
+    }
+    console.log("Fetch Succesful");
+    if (result.length > 0)
+    {
+      return res.json({
+      report: result
+    });
+    }
+    else{
+      return res.json({
+        report: "No inspections found for given date"
+      });
+    }
+  });
+};
+
 module.exports.updateolddata = function(req, res) {
   console.log(req.body);
 
