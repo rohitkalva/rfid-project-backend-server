@@ -33,6 +33,7 @@ app.post('/api/futureinspection', dataController.futureinspection); //fetch repo
 app.post('/app/imageupload/:tagid', dataController.imageupload) //Post API to upload image
 app.get('/api/app/images/:public/:uploads/:folder/:file_name', dataController.imagedownload) // GET API for image download
 app.post('/api/updateolddata', dataController.updateolddata)
+app.get('/api/unamecheck/:username', dataController.unamecheck)
 
 //Default Route
 app.get("/", (req, res) => {
