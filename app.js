@@ -33,7 +33,8 @@ app.post('/api/futureinspection', dataController.futureinspection); //fetch repo
 app.post('/app/imageupload/:tagid', dataController.imageupload) //Post API to upload image
 app.get('/api/app/images/:public/:uploads/:folder/:file_name', dataController.imagedownload) // GET API for image download
 app.post('/api/updateolddata', dataController.updateolddata)
-app.get('/api/unamecheck/:username', dataController.unamecheck)
+app.get('/api/unamecheck/:username', dataController.unamecheck) //Endpoint to validate username during new user creation
+app.post('/api/user/changepassword', authenticateController.passchange) //Endpoint to update or modify userpassword
 
 //Default Route
 app.get("/", (req, res) => {
