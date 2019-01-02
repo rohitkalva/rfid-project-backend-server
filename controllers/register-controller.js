@@ -8,13 +8,13 @@ var connection = require('./../config');
 module.exports.register = function (req, res) {
 
     //Input Type
-    //{
-    //	"name": "Rohit Kalva",
-    //	"username": "rohit",
-    //	"email": "rohitk@ovgu.de",
-    //	"password": "rohit"
-    //}
-
+    // {
+    // 	"name": "Rohit Kalva",
+    // 	"username": "rohit",
+    // 	"email": "rohitk@ovgu.de",
+    // 	"password": "rohit"
+    // }
+console.log(req.body)
     var today = new Date();
     var encryptedString = cryptr.encrypt(req.body.password);
     var users = {
@@ -27,15 +27,11 @@ module.exports.register = function (req, res) {
     connection.query('INSERT INTO users SET ?', users, function (error, results, fields) {
         if (error) {
             res.json({
-                status: false,
-                data: results,
                 message: 'User already exists'
             })
         } else {
             res.json({
-                status: true,
-                data: results,
-                message: 'user registered sucessfully'
+                message: 'User registered sucessfully'
             })
         }
     });

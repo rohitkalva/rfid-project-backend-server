@@ -403,3 +403,29 @@ module.exports.imagedownload = function(req, res) {
   console.log(link);
   res.download(link); // Set disposition and send it.
 }
+
+
+module.exports.unamecheck = function(req, res) {
+  const username = req.params.username;
+  // var tagid = input.split(","); //String.prototype.split to query data for multiple tagid's at once.
+  // console.log(tagid);
+
+  //SQL query to fetch tag information with recent inspected date data.
+  const queryString = "SELECT * from users where username = ?"
+  connection.query(queryString, [username], (err, result, fields) => {
+    if (err) {
+      console.log("Failed to query " + err);
+      res.sendStatus(500);
+      return;
+    }
+    //Condition to check if response set is null or not.
+    if (!result.length) {
+      return res.send({
+        result: 0
+      });
+    } else
+      return res.json({
+        result: 1
+      });
+  });
+};
