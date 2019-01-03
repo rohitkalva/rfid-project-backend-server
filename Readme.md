@@ -128,6 +128,19 @@ http://localhost:1080/api/app/gettagdata/tagid1,tagid2
 					"message": "Entry Successful!"
 					}
 
+## URL: /api/getreport
+	METHOD : POST
+	DESCRIPTION: Endpoint to fetch inspection data over a period of time between two date ranges. 
+
+	Request Sample: {
+  					"fromdate":"2018-11-20 00:00:00",
+  					"todate": "2018-11-25 23:59:59"
+  					}
+
+## URL: /api/getdayreport/:date
+	METHOD: GET
+	DESCRIPTION: Endpoint to fetch details of inspected items on a given date supplied in the URL
+
 
 ## URL: /app/imageupload/:tagid
     METHOD : POST
@@ -188,4 +201,39 @@ URL Example: /api/app/images/public/uploads/26-12-2018/111133B2DDD9014000000000-
 					"password": "password"
 					}
 
-	
+
+## URL: /api/unamecheck/:username
+	METHOD : GET
+	Description: Endpoint to check is supplied username is present in existing data.
+
+	Response Sample: {
+					"result": 1
+					}
+					When the username already exists
+
+					{
+					"result": 0
+					}
+					When the username is not taken
+
+## URL: /api/user/changepassword
+	METHOD : POST
+	Description: Endpoint for changing password for given username.
+
+	Request Sample: {
+					"username": "username",
+					"password": "password"
+					"newpassword": "newpassword"
+					}
+
+	Response Sample: {
+                       status: true,
+                       message: "Update successful"
+                       }
+
+					   OR
+
+					   {
+                        status: false,
+                        message: "Wrong password"
+                    	}
