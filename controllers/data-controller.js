@@ -338,7 +338,7 @@ module.exports.futureinspection = function(req, res) {
   const queryString = `SELECT @a := @a+1 as SNo, z.* 
   FROM(SELECT i.manufacturer, i.model, i.serial_no, l.tagid, i.year_of_mfg as Year, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, date (t.test_date) as Test_Date, t.user_name, t.check_interval, DATE(l.nextinspdate) as Next_Check
   FROM item_data i JOIN location_data l JOIN test_data t 
-  WHERE i.serial_no = l.serial_no AND l.tagid = t.tagid AND l.nextinspdate between ? AND ? ORDER BY l.nextinspdate ASC)z, 
+  WHERE i.serial_no = l.serial_no AND l.tagid = t.tagid AND l.nextinspdate between ? AND ? AND t.test_date = (SELECT MAX(x.test_date) FROM test_data x WHERE x.tagid = t.tagid) ORDER BY l.nextinspdate ASC)z, 
   (SELECT @a:=0)y;`;
   connection.query(queryString, [fromdate, todate], (err, result, fields) => {
     if (err) {
