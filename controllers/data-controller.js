@@ -117,9 +117,11 @@ module.exports.registration_data = function(req, res) {
 };
 
 module.exports.gettagdata = function(req, res) {
-  const input = req.params.tagid;
-  var tagid = input.split(","); //String.prototype.split to query data for multiple tagid's at once.
-  console.log(tagid);
+  // const input = req.params.tagid;
+  // var tagid = input.split(","); //String.prototype.split to query data for multiple tagid's at once.
+  // console.log(tagid);
+
+  const tagid = req.body.tagids
 
   //SQL query to fetch tag information with recent inspected date data.
   const queryString = `SELECT  l.tagid, i.serial_no, i.manufacturer, i.model, i.variant,  i.colour, l.label, l.localid as Identification, l.clinic, l.building, l.department, l.location, t.touch_test, t.xray_test, t.testremarks, t.test_status, DATE (t.test_date) as Test_Date, t.check_interval, DATE(l.nextinspdate) as Next_Check, t.comments, coalesce(group_concat(im.file_name separator ", "), 'NA') as File_name, coalesce(group_concat(distinct im.file_location), 'NA') as File_path
@@ -137,10 +139,13 @@ module.exports.gettagdata = function(req, res) {
       return res.send({
         error: "TagID not present in database."
       });
-    } else
-      return res.json({
-        TagData: result
-      });
+    } else{
+      // return res.json({
+      //   TagData: result
+      // });
+
+      return res.send({ error: false, data: result, message: 'Fetch Successful!' });
+    }
   });
 };
 

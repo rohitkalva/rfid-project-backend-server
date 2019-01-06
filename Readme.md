@@ -72,40 +72,44 @@ The response samples as presented here are basically sample of the response and 
                         "message": "Entry Successful!"
                     }
 
-## URL: /api/app/gettagdata/:tagid
-    METHOD : GET
+## URL: /api/app/gettagdata
+    METHOD : POST
     DESCRIPTION: The end point to fetch the data for individual tagid.
 
-Requests can also be sent using be below format where the tagid's are separated by a ',' to get response at once.
-```ssh
-http://localhost:1080/api/app/gettagdata/tagid1,tagid2
-```
+	Request Sample: {
+					"tagids": "222233B2DDD9014000000000"
+					}
 	
-    Response Sample: {"TagData": [{
-							"tagid": "112233445566778899",
-							"serial_no": "167260000012",
-							"manufacturer": "Mavig",
-							"model": "RA660",
+    Response Sample: {
+						"error": false,
+						"data": [
+							{
+							"tagid": "222233B2DDD9014000000000",
+							"serial_no": "1629233661",
+							"manufacturer": "GE",
+							"model": "RA660012",
 							"variant": "M",
-							"colour": "Indian Summer",
-							"label": "Prox X-Ray",
-							"Identification": "KRN-001",
+							"colour": "Blue",
+							"label": "Prof. X-Ray",
+							"Identification": "KRN-002",
 							"clinic": "Radiologie",
 							"building": "60a",
 							"department": "Angio",
-							"location": "Angio 3 / Raum 123",
+							"location": "Angio Room 123",
 							"touch_test": "ok",
 							"xray_test": "ok",
 							"testremarks": "NA",
 							"test_status": "Pass",
-							"Test_Date": "2018-12-15",
+							"Test_Date": "2018-12-26",
 							"check_interval": "12 Months",
-							"Next_Check": "2019-12-02",
-							"comments": "Everything is good."
-							"File_name": "111133B2DDD9014000000000-1545848806245.jpg",
-      						"File_path": "./public/uploads/26-12-2018/"
-						}]
-					}
+							"Next_Check": "2021-12-22",
+							"comments": "Everything is good.",
+							"File_name": "NA",
+							"File_path": "NA"
+							}
+						],
+						"message": "Fetch Successful!"
+						}
 
 
 ## URL: /api/app/updatetagdata
