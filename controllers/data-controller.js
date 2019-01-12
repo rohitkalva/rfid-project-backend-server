@@ -432,9 +432,6 @@ module.exports.imageupload = function(req, res) {
 };
 
 module.exports.imagedownload = function(req, res) {
-  const input = req.params.tagid;
-  var tagid = input.split(","); //String.prototype.split to query data for multiple tagid's at once.
-  console.log(tagid);
 
   const public = req.params.public;
   const uploads = req.params.uploads;
