@@ -241,3 +241,7 @@ URL Example: /api/app/images/public/uploads/26-12-2018/111133B2DDD9014000000000-
                         status: false,
                         message: "Wrong password"
                     	}
+
+## URL: /pingcheck
+	METHOD : GET
+	Description: Endpoint to check connectivity with server
