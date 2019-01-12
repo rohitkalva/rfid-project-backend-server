@@ -43,6 +43,11 @@ app.get("/", (req, res) => {
     res.send("Hello from ROOOOT")
 })
 
+app.get('/pingcheck', (req,res) => {
+    res.json({
+        message: "I am alive"
+      })
+})
 // app.get('/users', (req, res) => {
 //     //console.log("Fetching user with id: " + req.params.id)
 
