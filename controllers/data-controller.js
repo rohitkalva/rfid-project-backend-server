@@ -157,11 +157,34 @@ module.exports.updatetagdata = function(req, res) {
   const testremarks = req.body.testremarks;
   const test_status = req.body.test_status;
   const user_name = req.body.user_name;
-  const check_interval = req.body.check_interval;
+  // const check_interval = req.body.check_interval;
   const comments = req.body.comments;
   const nextinspdate = req.body.nextinspdate;
   //var today = 'now()';
 
+  //Function to calculate year difference between two dates
+  function getDateDiffInYears(date1, date2){
+  var dateParts1 = date1.split('-')
+    , dateParts2 = date2.split('-')
+    , d1 = new Date(dateParts1[0], dateParts1[1]-1, dateParts1[2])
+    , d2 = new Date(dateParts2[0], dateParts2[1]-1, dateParts2[2])
+
+  return new Date(d1 - d2).getYear() - new Date(0).getYear() + 1;
+}
+
+//Today's date
+var today = new Date();
+var y = today.getFullYear(),
+  m = today.getMonth() + 1, // january is month 0 in javascript
+  d = today.getDate();
+var pad = function(val) {
+  var str = val.toString();
+  return str.length < 2 ? "0" + str : str;
+};
+today = [y, pad(m), pad(d)].join("-");
+var diff = getDateDiffInYears(nextinspdate, today);
+
+const check_interval = diff * 12 + " Months"
   // var newinspdate = nextinspdate.split("/").reverse().join("-");
   // console.log("Date:>>"+newinspdate);
 
