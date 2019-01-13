@@ -83,29 +83,29 @@ The response samples as presented here are basically sample of the response and 
     Response Sample: {
 						"error": false,
 						"data": [
-							{
-							"tagid": "222233B2DDD9014000000000",
-							"serial_no": "1629233661",
+							 {
+							"tagid": "111133B2DDD9014000000000",
+							"serial_no": "1629233666",
 							"manufacturer": "GE",
 							"model": "RA660012",
 							"variant": "M",
-							"colour": "Blue",
+							"colour": "Indian Summer",
 							"label": "Prof. X-Ray",
-							"Identification": "KRN-002",
+							"Identification": "KRN-001",
 							"clinic": "Radiologie",
 							"building": "60a",
 							"department": "Angio",
 							"location": "Angio Room 123",
-							"touch_test": "ok",
-							"xray_test": "ok",
-							"testremarks": "NA",
-							"test_status": "Pass",
-							"Test_Date": "2018-12-26",
-							"check_interval": "12 Months",
-							"Next_Check": "2021-12-22",
-							"comments": "Everything is good.",
-							"File_name": "NA",
-							"File_path": "NA"
+							"touch_test": "MANGEL",
+							"xray_test": "OK",
+							"testremarks": "NAk",
+							"test_status": "PASSED",
+							"Test_Date": "2019-01-13",
+							"check_interval": null,
+							"Next_Check": "2021-01-13",
+							"comments": "Everything is good. supd",
+							"File_name": "111133B2DDD9014000000000-1547366627116.jpg",
+							"File_path": "/public/uploads/13-01-2019/"
 							}
 						],
 						"message": "Fetch Successful!"
