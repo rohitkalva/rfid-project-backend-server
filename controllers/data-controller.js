@@ -169,7 +169,7 @@ module.exports.updatetagdata = function(req, res) {
     , d1 = new Date(dateParts1[0], dateParts1[1]-1, dateParts1[2])
     , d2 = new Date(dateParts2[0], dateParts2[1]-1, dateParts2[2])
 
-  return new Date(d1 - d2).getYear() - new Date(0).getYear() + 1;
+  return new Date(d1 - d2).getYear() - new Date(0).getYear();
 }
 
 //Today's date
