@@ -4,13 +4,85 @@ const morgan = require('morgan')
 const bodyParser = require('body-parser')
 var connection = require('./config');
 var fs = require('fs');
+const http = require('http');
+const fb = require('./index.js');
+const path = require('path');
 
+//Code for file browser. Reference: https://github.com/sumitchawla/file-browser
+fb.configure({
+    removeLockString: true,
+
+    /*
+     * Example of otherRoots.
+     * The other roots are listed and displayed, but their
+     * locations need to be calculated by the server.
+     * See OTHERROOTS in the app.
+     */
+    otherRoots: [ '/tmp', '/broken' ]
+});
+
+function checkValidity(argv) {
+  if (argv.i && argv.e) return new Error('Select -i or -e.');
+  if (argv.i && argv.i.length === 0) return new Error('Supply at least one extension for -i option.');
+  if (argv.e && argv.e.length === 0) return new Error('Supply at least one extension for -e option.');
+  return true;
+}
+
+var argv = require('yargs')
+  .usage('Usage: $0 <command> [options]')
+  .command('$0', 'Browse file system.')
+  .example('$0 -e .js .swf .apk', 'Exclude extensions while browsing.')
+  .alias('i', 'include')
+  .array('i')
+  .describe('i', 'File extension to include.')
+  .alias('e', 'exclude')
+  .array('e')
+  .describe('e', 'File extensions to exclude.')
+  .alias('p', 'port')
+  .describe('p', 'Port to run the file-browser. [default:8088]')
+  .help('h')
+  .alias('h', 'help')
+  .check(checkValidity)
+  .argv;
+
+var dir =  process.cwd();
+app.get('/b', function(req, res) {
+    let file;
+    if (req.query.r === '/tmp') {
+
+        /*
+         * OTHERROOTS
+         * This is an example of a manually calculated path.
+         */
+        file = path.join(req.query.r,req.query.f);
+    } else {
+        file = path.join(dir,req.query.f);
+    }
+    res.sendFile(file);
+})
+
+
+app.use(express.static(__dirname)); // module directory
+console.log(__dirname + "\\public\\uploads")
+var server = http.createServer(app);
+
+fb.setcwd(dir, argv.include, argv.exclude);
+
+if(!argv.port) argv.port = 1080;
+
+
+// eslint-disable-next-line no-console
+console.log("Please open the link in your browser http://localhost:" +
+            argv.port);
+
+app.get('/files', fb.get);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }))
 
+//Main code
 app.use(morgan('short'))
 
 app.use(function (req, res, next) {
@@ -36,6 +108,7 @@ app.post('/api/updateolddata', dataController.updateolddata)
 app.get('/api/unamecheck/:username', dataController.unamecheck) //Endpoint to validate username during new user creation
 app.post('/api/user/changepassword', authenticateController.passchange) //Endpoint to update or modify userpassword
 app.get('/api/getdayreport/:date', dataController.getdayreport) //Endpoint to fetch inspection records for given date
+app.get("/file-browser", (req, res) => {res.redirect('lib/template.html')}) //Routing for file-browser within webbrowser
 
 //Default Route
 app.get("/", (req, res) => {
