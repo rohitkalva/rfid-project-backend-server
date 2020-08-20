@@ -1,10 +1,10 @@
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
-		host: '141.44.18.16',
+		host: '', // Host IP Address
 		port: 3306,
-        user: 'inka',
-        password: '#inkaOvgu2018',
+        user: '', //DB username
+        password: '', //DB password
         database: 'rfid_project',
         dateStrings: true
 })
